@@ -8,7 +8,7 @@ export class ProgramLoadError extends Schema.TaggedError<ProgramLoadError>()("Pr
 
 /** Keep the actual argv in reports, but name the runner in human diagnostics. */
 export const formatTestCommand = (command: ReadonlyArray<string>): string => {
-  const launcher = command.findIndex(arg => !arg.startsWith("-") && arg.endsWith("/launch.mjs"));
+  const launcher = command.findIndex(arg => !arg.startsWith("-") && /[\\/]mutant-vitest-[^\\/]+[\\/]launch\.mjs$/.test(arg));
   return launcher > 0
     ? `vitest ${command.slice(launcher + 1).filter(arg => arg === "--reporter=default" || !arg.startsWith("--reporter=")).join(" ")} (via ${command.join(" ")})`
     : command.join(" ");
